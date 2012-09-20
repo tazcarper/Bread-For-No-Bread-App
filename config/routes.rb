@@ -1,4 +1,13 @@
 BreadForNobread::Application.routes.draw do
+  resources :users, :static_pages
+  
+ 
+  root to: 'users#new'
+  
+  match '/thankYou',   to: 'static_pages#thankYou'
+  
+  
+  
   # The priority is based upon order of creation:
   # first created -> highest priority.
 
