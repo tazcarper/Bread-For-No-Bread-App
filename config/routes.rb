@@ -3,7 +3,7 @@ BreadForNobread::Application.routes.draw do
   
  
   root to: 'users#new'
-  
+  match '/users',   to: 'users#new'
   match '/thankYou',   to: 'static_pages#thankYou'
   
   
