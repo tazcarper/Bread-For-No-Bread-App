@@ -18,9 +18,11 @@ class User < ActiveRecord::Base
   validates :email,
   :presence => { :message => "Please enter email" },
   format: { with: VALID_EMAIL_REGEX, :message => "Must be valid email." }
-  #validate :validate_only_one_signup_per_week, :on => :create
+  validate :validate_only_one_signup_per_week
   
-  validate :validate_referral_existence, on: :create
+  validate :validate_referral_existence
+  
+  validate :validate_referral_ownership
 
   scope :in_the_past_week, lambda { where('created_at > ?', 1.week.ago) }
   
@@ -29,10 +31,27 @@ class User < ActiveRecord::Base
       self.errors.add(:referral, 'Invalid referral key.')
     end
   end
+  
+  def validate_referral_ownership
+    if !referral.blank? and referral == referral_key.to_s
+      self.errors.add(:referral, 'You cannot refer yourself.')
+    end
+  end
 
   def validate_only_one_signup_per_week
     if User.where(:email => self.email).in_the_past_week.any?
       self.errors.add(:email, 'can only one be entered once per week')
+    end
+  end
+  
+  def create_entries(referralKey)
+    entry = Entry.new
+    entry.user_id = self.referral_key
+    entry.save
+    if !referralKey.blank? # User.exists?(referral_key: referralKey)
+      refEntry = Entry.new
+      refEntry.user_id = referralKey
+      refEntry.save
     end
   end
 
