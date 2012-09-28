@@ -1,5 +1,5 @@
 <ul>
   <% @entries.each do |entry| %>
-    <li><%= entry.user_id %></li>
+    <li><%= entry.user.email %></li>
   <% end %>
 </ul>

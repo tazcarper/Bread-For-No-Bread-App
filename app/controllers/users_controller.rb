@@ -7,22 +7,27 @@ class UsersController < ApplicationController
 
   def create
     @user = User.new(params[:user])
-    if @user.save
+    referralKey = @user.referral
+    if @user.save      
       random = (Random.rand(100_000-10_000)+10_000).to_s
       @user.referral_key = random + @user.id.to_s
       @user.save
       @entry = Entry.new
-      @entry.user_id = @user.id
+      @entry.user_id = @user.referral_key
       @entry.save
-      unless params[:referral].nil? or params[:referral] == 0 or params[:referral] == ''
+      if User.exists?(:referral_key => referralKey)
         @refEntry = Entry.new
-        @refEntry.user_id = params[:referral].slice!(0, 5)
+        @refEntry.user_id = referralKey
         @refEntry.save
       end
-      redirect_to ('/thankYou'), notice: 'referral id: ' + params[:referral].slice!(0, 5)
+      redirect_to ('/thankYou')#, notice: 'referral id: ' + referralKey
     else
-      render 'new'
+      render "new"
     end
+  end
+  
+  def update
+    
   end
 
   def index

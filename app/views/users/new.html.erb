@@ -1,7 +1,5 @@
 <h1>Bread for No bread - Sign up</h1>
 
-
-
     <%= form_for(@user) do |f| %>
 		<%= render 'shared/error_messages' %>
       <%= f.label :first_name %>
@@ -13,8 +11,8 @@
       <%= f.label :email %>
       <%= f.text_field :email %>
       
-      <%= label_tag 'Referral Key' %>
-      <%= number_field_tag 'referral' %>
+      <%= f.label 'Referral Key' %>
+      <%= f.number_field :referral %>
  
       <%= f.submit "Sign up", class: "btn btn-large btn-primary" %>
     <% end %>
