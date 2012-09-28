@@ -1,5 +1,5 @@
 BreadForNobread::Application.routes.draw do
-  resources :users, :static_pages
+  resources :users, :static_pages, :entries
   
  
   root to: 'users#new'

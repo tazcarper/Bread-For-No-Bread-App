@@ -12,8 +12,9 @@
 
       <%= f.label :email %>
       <%= f.text_field :email %>
-
+      
+      <%= label_tag 'Referral Key' %>
+      <%= number_field_tag 'referral' %>
  
       <%= f.submit "Sign up", class: "btn btn-large btn-primary" %>
     <% end %>
-<%= link_to 'Export to Excel', url_for(:format => 'xls') %>
