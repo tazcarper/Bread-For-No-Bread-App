@@ -24,7 +24,7 @@ class UsersController < ApplicationController
       if good == true
         render action: "new"
       else
-        redirect_to ('/'), notice: 'You can only one enter once per week.'
+        redirect_to ('/'), notice: 'You can only enter once per week.'
       end
     end
   end
