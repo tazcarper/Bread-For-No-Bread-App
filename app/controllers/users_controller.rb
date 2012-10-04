@@ -1,4 +1,5 @@
 class UsersController < ApplicationController
+  
   def new
     @entry = Entry.new
     @user = User.new
@@ -8,26 +9,33 @@ class UsersController < ApplicationController
   def create
     @user = User.find_or_initialize_by_email(params[:user])
     referralKey = params[:user][:referral]
-    @user.update_attributes(params[:user])
     random = (Random.rand(100_000-10_000)+10_000).to_s
     @user.referral_key = random + @user.id.to_s if @user.referral_key.blank?
     if @user.save
       @user.create_entries(referralKey)
       redirect_to ('/thankYou')#, notice: 'referral id: ' + referralKey + @user.referral_key
     else
-      render "new"
+      good = true
+      @user.errors.each do |attr_name, message|
+        if message == "can only one be entered once per week"
+          good = false
+        end
+      end
+      if good == true
+        render action: "new"
+      else
+        redirect_to ('/'), notice: 'You can only one enter once per week.'
+      end
     end
   end
   
   def update
     @user = User.find(params[:id])
     referralKey = params[:user][:referral]
-    @user.update_attributes(params[:user])
-    if @user.save
+    if @user.save and @user.update_attributes(params[:user])
       @user.create_entries(referralKey)
       redirect_to ('/thankYou')#, notice: 'referral id: ' + referralKey + @user.referral_key
     else
-      render "new"
     end
   end
 

@@ -39,7 +39,7 @@ class User < ActiveRecord::Base
   end
 
   def validate_only_one_signup_per_week
-    if User.where(:email => self.email).in_the_past_week.any?
+    if Entry.where("email = ? AND referred = ?", self.email, false).in_the_past_week.any?
       self.errors.add(:email, 'can only one be entered once per week')
     end
   end
@@ -47,10 +47,14 @@ class User < ActiveRecord::Base
   def create_entries(referralKey)
     entry = Entry.new
     entry.user_id = self.referral_key
+    entry.email = self.email
     entry.save
     if !referralKey.blank? # User.exists?(referral_key: referralKey)
+      user = User.find_by_referral_key(referralKey)
       refEntry = Entry.new
       refEntry.user_id = referralKey
+      refEntry.email = user.email
+      refEntry.referred = true
       refEntry.save
     end
   end

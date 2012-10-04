@@ -1,9 +1,9 @@
 BreadForNobread::Application.routes.draw do
   root to: 'users#new'
+  match '/thankYou',   to: 'static_pages#thankYou'
   resources :users, :static_pages, :entries
   
   #match '/users',   to: 'users#new'
-  match '/thankYou',   to: 'static_pages#thankYou'
   
   
   

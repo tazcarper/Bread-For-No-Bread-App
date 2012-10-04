@@ -1,5 +1,15 @@
 <ul>
-  <% @entries.each do |entry| %>
-    <li><%= entry.user.email %></li>
-  <% end %>
+  <table>
+    <thead>
+      <th>Email</th>
+      <th>Referred</th>
+    </thead>
+    <tbody>
+      <% @entries.each do |entry| %>
+        <tr>
+          <td><%= entry.email %></td>
+          <td><%= entry.referred %></td>
+        </tr>
+      <% end %>
+    </tbody>
 </ul>
